@@ -15,7 +15,7 @@ namespace ChallengeForXmenBattleCount
             // Pheonix most battles
 
             string[] names = new string[] { "Professor X", "Iceman", "Angel", "Beast", "Pheonix", "Cyclops", "Wolverine", "Nightcrawler", "Storm", "Colossus" };
-            int[] numbers = new int[] { 7, 9, 12, 15, 17, 13, 2, 6, 8, 13 };
+            int[] numbers = new int[] { 7, 9, 12, 15, 17, 13, 2, 6, 8, 12 };
 
             string result = "";
 
@@ -30,9 +30,68 @@ namespace ChallengeForXmenBattleCount
                 minFights = (numbers[i] < minFights) ? numbers[i] : minFights;
             }
 
-            result = "Most battles belongs to: " + names[Array.IndexOf(numbers, maxFights)] + " (Value: " + maxFights + ")" + "<br />" +
-                     "Least battles belongs to: " + names[Array.IndexOf(numbers, minFights)] + " (Value: " + minFights + ")";
+            //the below code handles ties for max and min fights.
+            int minDupe = 0;
+            int maxDupe = 0;
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                minDupe += (numbers[i] == minFights) ? 1 : 0;
+                maxDupe += (numbers[i] == maxFights) ? 1 : 0;
+            }
+
+            if (minDupe == 1 && maxDupe == 1)
+            {
+                result = "Most battles belongs to: " + names[Array.IndexOf(numbers, maxFights)] + " (Value: " + maxFights + ")" + "<br />" +
+                         "Least battles belongs to: " + names[Array.IndexOf(numbers, minFights)] + " (Value: " + minFights + ")";
+            }
+            else
+            {
+                if (maxDupe > 1)
+                {
+                    string maxNames = "";
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        if (numbers[i] == maxFights)
+                        {
+                            if (maxNames != "")
+                            {
+                                maxNames += ", ";
+                            }
+                            maxNames += names[i];
+                        }
+                    }
+                    result = "Most battles is a tie between: " + maxNames + " (Value: " + maxFights + ")" + "<br />";
+                }
+                else
+                {
+                    result = "Most battles belongs to: " + names[Array.IndexOf(numbers, maxFights)] + " (Value: " + maxFights + ")" + "<br />";
+                }
+                if (minDupe > 1)
+                {
+                    string minNames = "";
+                    for (int i = 0; i < names.Length; i++)
+                    {
+                        if (numbers[i] == minFights)
+                        {
+                            if (minNames != "")
+                            {
+                                minNames += ", ";
+                            }
+                            minNames += names[i];
+                        }
+                    }
+                    result += "Least battles is a tie between: " + minNames + " (Value: " + minFights + ")";
+                }
+                else
+                {
+                    result += "Most battles belongs to: " + names[Array.IndexOf(numbers, minFights)] + " (Value: " + minFights + ")";
+                }
+            }
+            
+
+           
             resultLabel.Text = result;
+
         }
     }
 }
